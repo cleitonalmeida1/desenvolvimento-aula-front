@@ -1,18 +1,35 @@
 <template>
-  <div class="home">
-    <img src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div>
+        <img src="../assets/logo.png">
+        <Categoria v-bind:categoria="objeto"></Categoria>
+    </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+    import Categoria from '@/components/Categoria.vue'
+    import Vue from 'vue'
 
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'categoria',
+        props: {},
+        data: function () {
+            return {
+                objeto: {}
+            }
+        },
+        components: {
+            Categoria
+        },
+        methods: {
+            getCategorias: function () {
+                Vue.http.get(`http://localhost:8081/categorias/1`).then((res) => {
+                    // Depois que a requisição terminar, passamos o resultado para função dispatch que se encarregará de atualizar a mutation
+                    this.objeto = res.data;
+                });
+            }
+        },
+        mounted: function () {
+            this.getCategorias();
+        }
+    }
 </script>
